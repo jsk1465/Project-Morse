@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <MediaController
-        android:id="@+id/media_home"
+        android:id="@+id/media_conversion"
         android:layout_height="match_parent"
         android:layout_width="match_parent">
         <TextView
-            android:id="@+id/text_home"
+            android:id="@+id/text_notifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

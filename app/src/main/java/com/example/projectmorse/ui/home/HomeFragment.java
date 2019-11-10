@@ -1,6 +1,5 @@
 package com.example.projectmorse.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,23 +15,27 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.projectmorse.GlobalVarD;
 import com.example.projectmorse.GlobalVars;
 import com.example.projectmorse.R;
 import com.example.projectmorse.ui.conversion.ConversionFragment;
+import com.example.projectmorse.ui.home.HomeFragment;
 import com.example.projectmorse.ui.settings.SettingsFragment;
 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
     private Boolean pressedDown = false;
     private Date prev = new Date();
     private Queue<GlobalVars> theData = new LinkedList<>();
     private GlobalVars prevV = GlobalVars.dot;
+    final static GlobalVarD gvd = GlobalVarD.getInstance();
+
+    private HomeViewModel homeViewModel;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -52,6 +55,9 @@ public class HomeFragment extends Fragment {
                 Date cur = new Date();
                 long dif = (cur.getTime() - prev.getTime());
                 GlobalVars d = GlobalVars.getType(dif);
+                if(gvd.wasShook){
+                    return false;
+                }
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP && pressedDown){
                     if(d == GlobalVars.comm){
 //                        GO TO CONVERTER
@@ -61,15 +67,15 @@ public class HomeFragment extends Fragment {
 //                        GO TO SETTINGS
                         Fragment fragment = new SettingsFragment();
                         replaceFragment(fragment);
-                    } else if(d == GlobalVars.dot || d == GlobalVars.dash || d==GlobalVars.space){
-//                        ADD DOT TO DATA
-                        theData.add(d);
-                    } else if(d == GlobalVars.home){
-//                          SEND THE DATA TODO
-                    } else if(d == GlobalVars.na){
-//                          NA DO NOTHING
-                    }
-                    pressedDown = false;
+                        } else if(d == GlobalVars.dot || d == GlobalVars.dash || d==GlobalVars.space){
+                //                        ADD DOT TO DATA
+                            theData.add(d);
+                        } else if(d == GlobalVars.home){
+                //                          SEND THE DATA TODO
+                        } else if(d == GlobalVars.na){
+                //                          NA DO NOTHING
+                        }
+                pressedDown = false;
                 } else if(motionEvent.getAction() == MotionEvent.ACTION_DOWN && !pressedDown){
                     prev = new Date();
                     pressedDown = true;
@@ -78,15 +84,15 @@ public class HomeFragment extends Fragment {
 //                    SEND A LITTLE VIBRATION TODO
                     prevV = d;
                 }
-                return false;
-            }
+        return false;
+        }
         });
 
         return root;
-    }
+        }
     public void replaceFragment(Fragment someFragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_home, someFragment);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.media_home, someFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

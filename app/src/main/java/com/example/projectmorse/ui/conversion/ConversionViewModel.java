@@ -10,7 +10,7 @@ public class ConversionViewModel extends ViewModel {
 
     public ConversionViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mText.setValue("This is Common Fase fragment");
     }
 
     public LiveData<String> getText() {
